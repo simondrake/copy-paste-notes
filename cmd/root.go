@@ -13,7 +13,7 @@ import (
 var cfgFile string
 
 var rootCmd = &cobra.Command{
-	Use:   "cpn",
+	Use:   "copy-paste-notes",
 	Short: "copy-paste-notes is a command-line note taking app",
 	Long: `Manage all your notes using the command-line, including the ability to
 	copy directly into your system clipboard.`,

@@ -6,6 +6,7 @@ It is in very early development, so it comes with no assurances. It has only bee
 
 # Setup/Installation
 
+* Install - `go install github.com/simondrake/copy-paste-notes@latest`
 * Create the database file - `touch ~/cpn.db`
 
 # Platform Specific Details
@@ -24,3 +25,4 @@ In addition to installing `libx11-dev` or `xorg-dev` or `libX11-devel`, you'll a
 * [ ] Tests 🙈
 * [ ] See if there's a way of making this work without the `os/exec` / `wl-clipboard` hack.
 * [ ] Test on different platforms.
+* [ ] Support releases/tags
