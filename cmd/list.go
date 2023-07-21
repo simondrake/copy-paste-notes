@@ -36,7 +36,7 @@ func newListCommand(client *sqlite.Client) *cobra.Command {
 					n.Description = strings.ReplaceAll(n.Description, "\\n ", "\n")
 				}
 
-				table.Append([]string{fmt.Sprint(n.ID), n.Createtimestamp, n.Title, n.Description})
+				table.Append([]string{fmt.Sprint(n.ID), n.CreateTimestamp, n.Title, n.Description})
 			}
 
 			table.Render()
