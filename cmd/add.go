@@ -21,7 +21,7 @@ func newAddCommand(client *sqlite.Client) *cobra.Command {
 		Short: "Adds a note",
 		Run: func(_ *cobra.Command, _ []string) {
 			_, err := client.InsertNote(notes.Note{
-				Createtimestamp: time.Now().Format("2006-01-02 15:04:05"),
+				CreateTimestamp: time.Now().Format("2006-01-02 15:04:05"),
 				Title:           title,
 				Description:     description,
 			})
