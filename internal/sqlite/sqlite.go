@@ -54,7 +54,7 @@ func (c *Client) GetNote(id int) (*notes.Note, error) {
 
 	n := &notes.Note{}
 
-	err := row.Scan(&n.ID, &n.Createtimestamp, &n.Title, &n.Description)
+	err := row.Scan(&n.ID, &n.CreateTimestamp, &n.Title, &n.Description)
 
 	return n, err
 }
