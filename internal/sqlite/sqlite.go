@@ -60,7 +60,7 @@ func (c *Client) GetNote(id int) (*notes.Note, error) {
 }
 
 func (c *Client) InsertNote(n notes.Note) (int, error) {
-	res, err := c.db.Exec("INSERT INTO notes VALUES(NULL,?,?,?);", n.Createtimestamp, n.Title, n.Description)
+	res, err := c.db.Exec("INSERT INTO notes VALUES(NULL,?,?,?);", n.CreateTimestamp, n.Title, n.Description)
 	if err != nil {
 		return 0, err
 	}
