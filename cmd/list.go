@@ -27,7 +27,7 @@ func newListCommand(client *sqlite.Client) *cobra.Command {
 			}
 
 			table := tablewriter.NewWriter(os.Stdout)
-			table.SetHeader([]string{"ID", "Title", "Description"})
+			table.SetHeader([]string{"ID", "Create Timestamp", "Title", "Description"})
 
 			table.SetAutoWrapText(autoWrapText)
 
@@ -36,7 +36,7 @@ func newListCommand(client *sqlite.Client) *cobra.Command {
 					n.Description = strings.ReplaceAll(n.Description, "\\n ", "\n")
 				}
 
-				table.Append([]string{fmt.Sprint(n.ID), n.Title, n.Description})
+				table.Append([]string{fmt.Sprint(n.ID), n.Createtimestamp, n.Title, n.Description})
 			}
 
 			table.Render()

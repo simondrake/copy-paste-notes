@@ -6,9 +6,10 @@ type Client struct {
 }
 
 type Note struct {
-	ID          int
-	Title       string
-	Description string
+	ID              int
+	Title           string
+	Description     string
+	Createtimestamp string
 }
 
 type NoteReader interface {

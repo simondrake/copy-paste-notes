@@ -20,7 +20,7 @@ func New(file string) (*Client, error) {
 		return nil, err
 	}
 
-	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS [notes] ( id INTEGER NOT NULL PRIMARY KEY, title TEXT, description TEXT);"); err != nil {
+	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS [notes] ( id INTEGER NOT NULL PRIMARY KEY, createtimestamp, title TEXT, description TEXT);"); err != nil {
 		return nil, err
 	}
 
@@ -30,7 +30,7 @@ func New(file string) (*Client, error) {
 }
 
 func (c *Client) ListNotes() ([]notes.Note, error) {
-	rows, err := c.db.Query("SELECT id, title, description FROM notes")
+	rows, err := c.db.Query("SELECT id, createtimestamp, title, description FROM notes")
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (c *Client) ListNotes() ([]notes.Note, error) {
 	out := make([]notes.Note, 0)
 	for rows.Next() {
 		n := notes.Note{}
-		if err := rows.Scan(&n.ID, &n.Title, &n.Description); err != nil {
+		if err := rows.Scan(&n.ID, &n.Createtimestamp, &n.Title, &n.Description); err != nil {
 			return nil, err
 		}
 		out = append(out, n)
@@ -50,17 +50,17 @@ func (c *Client) ListNotes() ([]notes.Note, error) {
 }
 
 func (c *Client) GetNote(id int) (*notes.Note, error) {
-	row := c.db.QueryRow("SELECT id, title, description FROM notes WHERE id=?", id)
+	row := c.db.QueryRow("SELECT id, createtimestamp, title, description FROM notes WHERE id=?", id)
 
 	n := &notes.Note{}
 
-	err := row.Scan(&n.ID, &n.Title, &n.Description)
+	err := row.Scan(&n.ID, &n.Createtimestamp, &n.Title, &n.Description)
 
 	return n, err
 }
 
 func (c *Client) InsertNote(n notes.Note) (int, error) {
-	res, err := c.db.Exec("INSERT INTO notes VALUES(NULL,?,?);", n.Title, n.Description)
+	res, err := c.db.Exec("INSERT INTO notes VALUES(NULL,?,?,?);", n.Createtimestamp, n.Title, n.Description)
 	if err != nil {
 		return 0, err
 	}
