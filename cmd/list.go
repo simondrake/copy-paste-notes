@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/simondrake/copy-paste-notes/internal/sqlite"
@@ -10,7 +11,10 @@ import (
 )
 
 func newListCommand(client *sqlite.Client) *cobra.Command {
-	var autoWrapText bool
+	var (
+		autoWrapText bool
+		parseNewline bool
+	)
 
 	listCmd := &cobra.Command{
 		Use:   "list",
@@ -28,13 +32,19 @@ func newListCommand(client *sqlite.Client) *cobra.Command {
 			table.SetAutoWrapText(autoWrapText)
 
 			for _, n := range notes {
+				if parseNewline {
+					n.Description = strings.ReplaceAll(n.Description, "\\n ", "\n")
+				}
+
 				table.Append([]string{fmt.Sprint(n.ID), n.Title, n.Description})
 			}
+
 			table.Render()
 		},
 	}
 
 	listCmd.Flags().BoolVarP(&autoWrapText, "autowrap", "w", false, "whether to auto wrap the text output")
+	listCmd.Flags().BoolVarP(&parseNewline, "parsenewline", "p", false, "Whether to parse the newline character as a literal newline")
 
 	return listCmd
 }

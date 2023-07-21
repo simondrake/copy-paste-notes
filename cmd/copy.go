@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	"golang.design/x/clipboard"
 
@@ -13,7 +14,10 @@ import (
 )
 
 func newCopyCommand(client *sqlite.Client) *cobra.Command {
-	var id int
+	var (
+		id           int
+		parseNewline bool
+	)
 
 	addCmd := &cobra.Command{
 		Use:   "copy",
@@ -35,6 +39,10 @@ func newCopyCommand(client *sqlite.Client) *cobra.Command {
 				os.Exit(1)
 			}
 
+			if parseNewline {
+				note.Description = strings.ReplaceAll(note.Description, "\\n ", "\n")
+			}
+
 			if os.Getenv("WAYLAND_DISPLAY") != "" {
 				if err := exec.Command("wl-copy", note.Description).Run(); err != nil {
 					fmt.Fprintln(os.Stderr, "unable to copy with wl-clipboard: ", err)
@@ -49,6 +57,7 @@ func newCopyCommand(client *sqlite.Client) *cobra.Command {
 	}
 
 	addCmd.Flags().IntVar(&id, "id", 0, "id of the note")
+	addCmd.Flags().BoolVarP(&parseNewline, "parsenewline", "p", false, "Whether to parse the newline character as a literal newline")
 
 	return addCmd
 }
