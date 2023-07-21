@@ -40,7 +40,7 @@ func (c *Client) ListNotes() ([]notes.Note, error) {
 	out := make([]notes.Note, 0)
 	for rows.Next() {
 		n := notes.Note{}
-		if err := rows.Scan(&n.ID, &n.Createtimestamp, &n.Title, &n.Description); err != nil {
+		if err := rows.Scan(&n.ID, &n.CreateTimestamp, &n.Title, &n.Description); err != nil {
 			return nil, err
 		}
 		out = append(out, n)
