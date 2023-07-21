@@ -9,7 +9,7 @@ type Note struct {
 	ID              int
 	Title           string
 	Description     string
-	Createtimestamp string
+	CreateTimestamp string
 }
 
 type NoteReader interface {
