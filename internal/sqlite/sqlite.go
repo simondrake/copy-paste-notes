@@ -20,7 +20,7 @@ func New(file string) (*Client, error) {
 		return nil, err
 	}
 
-	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS [notes] ( id INTEGER NOT NULL PRIMARY KEY, createtimestamp, title TEXT, description TEXT);"); err != nil {
+	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS [notes] ( id INTEGER NOT NULL PRIMARY KEY, create_timestamp TEXT, title TEXT, description TEXT);"); err != nil {
 		return nil, err
 	}
 
@@ -30,7 +30,7 @@ func New(file string) (*Client, error) {
 }
 
 func (c *Client) ListNotes() ([]notes.Note, error) {
-	rows, err := c.db.Query("SELECT id, createtimestamp, title, description FROM notes")
+	rows, err := c.db.Query("SELECT id, create_timestamp, title, description FROM notes")
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (c *Client) ListNotes() ([]notes.Note, error) {
 }
 
 func (c *Client) GetNote(id int) (*notes.Note, error) {
-	row := c.db.QueryRow("SELECT id, createtimestamp, title, description FROM notes WHERE id=?", id)
+	row := c.db.QueryRow("SELECT id, create_timestamp, title, description FROM notes WHERE id=?", id)
 
 	n := &notes.Note{}
 
