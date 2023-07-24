@@ -20,7 +20,7 @@ func New(file string) (*Client, error) {
 		return nil, err
 	}
 
-	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS [notes] ( id INTEGER NOT NULL PRIMARY KEY, create_timestamp TEXT, title TEXT NOT NULL UNIQUE, description NOT NULL TEXT);"); err != nil {
+	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS [notes] ( id INTEGER NOT NULL PRIMARY KEY, create_timestamp TEXT, title TEXT NOT NULL UNIQUE, description TEXT NOT NULL);"); err != nil {
 		return nil, err
 	}
 
