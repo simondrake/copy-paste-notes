@@ -4,6 +4,8 @@ copy-paste-notes is a CLI that is designed to make it possible to manage your no
 
 It is in very early development, so it comes with no assurances. It has only been tested on Ubuntu Linux. It _may_ work with your system, but it is in no way guaranteed.
 
+**Note:** Expect breaking changes to occur until `v0.1.0`.
+
 # Setup/Installation
 
 * Install - `go install github.com/simondrake/copy-paste-notes@latest`
