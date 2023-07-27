@@ -33,7 +33,14 @@ func newListCommand(client *sqlite.Client) *cobra.Command {
 
 			for _, n := range notes {
 				if parseNewline {
-					n.Description = strings.ReplaceAll(n.Description, "\\n ", "\n")
+					spl := strings.Split(n.Description, "\\n")
+
+					out := make([]string, len(spl))
+					for i, s := range spl {
+						out[i] = strings.TrimSpace(s)
+					}
+
+					n.Description = strings.Join(out, "\n")
 				}
 
 				table.Append([]string{fmt.Sprint(n.ID), n.CreateTimestamp, n.Title, n.Description})
