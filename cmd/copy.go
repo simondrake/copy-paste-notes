@@ -40,7 +40,14 @@ func newCopyCommand(client *sqlite.Client) *cobra.Command {
 			}
 
 			if parseNewline {
-				note.Description = strings.ReplaceAll(note.Description, "\\n ", "\n")
+				spl := strings.Split(note.Description, "\\n")
+
+				out := make([]string, len(spl))
+				for i, s := range spl {
+					out[i] = strings.TrimSpace(s)
+				}
+
+				note.Description = strings.Join(out, "\n")
 			}
 
 			if os.Getenv("WAYLAND_DISPLAY") != "" {
