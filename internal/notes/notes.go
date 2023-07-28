@@ -14,7 +14,8 @@ type Note struct {
 
 type NoteReader interface {
 	ListNotes() ([]Note, error)
-	GetNote(int) (*Note, error)
+	GetNoteByID(int) (*Note, error)
+	GetNoteByTitle(string) (*Note, error)
 }
 
 type NoteWriter interface {
@@ -35,8 +36,12 @@ func New(nrw NoteReaderWriter) *Client {
 	}
 }
 
-func (c *Client) Get(id int) (*Note, error) {
-	return c.nr.GetNote(id)
+func (c *Client) GetByID(id int) (*Note, error) {
+	return c.nr.GetNoteByID(id)
+}
+
+func (c *Client) GetByTitle(title string) (*Note, error) {
+	return c.nr.GetNoteByTitle(title)
 }
 
 func (c *Client) List() ([]Note, error) {
