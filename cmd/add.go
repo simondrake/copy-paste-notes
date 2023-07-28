@@ -35,5 +35,8 @@ func newAddCommand(client *sqlite.Client) *cobra.Command {
 	addCmd.Flags().StringVarP(&title, "title", "t", "", "title of the note")
 	addCmd.Flags().StringVarP(&description, "description", "d", "", "description of the note")
 
+	addCmd.MarkFlagRequired("title")
+	addCmd.MarkFlagRequired("description")
+
 	return addCmd
 }

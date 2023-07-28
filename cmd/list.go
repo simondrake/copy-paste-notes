@@ -13,7 +13,7 @@ import (
 func newListCommand(client *sqlite.Client) *cobra.Command {
 	var (
 		autoWrapText bool
-		parseNewline bool
+		raw          bool
 	)
 
 	listCmd := &cobra.Command{
@@ -32,7 +32,7 @@ func newListCommand(client *sqlite.Client) *cobra.Command {
 			table.SetAutoWrapText(autoWrapText)
 
 			for _, n := range notes {
-				if parseNewline {
+				if !raw {
 					spl := strings.Split(n.Description, "\\n")
 
 					out := make([]string, len(spl))
@@ -51,7 +51,7 @@ func newListCommand(client *sqlite.Client) *cobra.Command {
 	}
 
 	listCmd.Flags().BoolVarP(&autoWrapText, "autowrap", "w", false, "whether to auto wrap the text output")
-	listCmd.Flags().BoolVarP(&parseNewline, "parsenewline", "p", false, "Whether to parse the newline character as a literal newline")
+	listCmd.Flags().BoolVarP(&raw, "raw", "r", false, "Whether to show the raw text (e.g. don't parse the newline character as a literal newline)")
 
 	return listCmd
 }

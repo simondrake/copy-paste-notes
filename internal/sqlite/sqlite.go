@@ -49,8 +49,18 @@ func (c *Client) ListNotes() ([]notes.Note, error) {
 	return out, nil
 }
 
-func (c *Client) GetNote(id int) (*notes.Note, error) {
+func (c *Client) GetNoteByID(id int) (*notes.Note, error) {
 	row := c.db.QueryRow("SELECT id, create_timestamp, title, description FROM notes WHERE id=?", id)
+
+	n := &notes.Note{}
+
+	err := row.Scan(&n.ID, &n.CreateTimestamp, &n.Title, &n.Description)
+
+	return n, err
+}
+
+func (c *Client) GetNoteByTitle(title string) (*notes.Note, error) {
+	row := c.db.QueryRow("SELECT id, create_timestamp, title, description FROM notes WHERE title=?", title)
 
 	n := &notes.Note{}
 
