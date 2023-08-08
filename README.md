@@ -27,5 +27,4 @@ In addition to installing `libx11-dev` or `xorg-dev` or `libX11-devel`, you'll a
 * [ ] Tests 🙈
 * [ ] See if there's a way of making this work without the `os/exec` / `wl-clipboard` hack.
 * [ ] Test on different platforms.
-* [ ] Support releases/tags.
 * [ ] Create the db file if it doesn't exist, to avoid having to `touch` it manually.
