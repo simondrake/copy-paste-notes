@@ -14,6 +14,7 @@ func newListCommand(client *sqlite.Client) *cobra.Command {
 	var (
 		autoWrapText bool
 		raw          bool
+		titleOnly    bool
 	)
 
 	listCmd := &cobra.Command{
@@ -27,11 +28,21 @@ func newListCommand(client *sqlite.Client) *cobra.Command {
 			}
 
 			table := tablewriter.NewWriter(os.Stdout)
-			table.SetHeader([]string{"ID", "Create Timestamp", "Title", "Description"})
+
+			if titleOnly {
+				table.SetHeader([]string{"ID", "Create Timestamp", "Title"})
+			} else {
+				table.SetHeader([]string{"ID", "Create Timestamp", "Title", "Description"})
+			}
 
 			table.SetAutoWrapText(autoWrapText)
 
 			for _, n := range notes {
+				if titleOnly {
+					table.Append([]string{fmt.Sprint(n.ID), n.CreateTimestamp, n.Title})
+					continue
+				}
+
 				if !raw {
 					spl := strings.Split(n.Description, "\\n")
 
@@ -52,6 +63,7 @@ func newListCommand(client *sqlite.Client) *cobra.Command {
 
 	listCmd.Flags().BoolVarP(&autoWrapText, "autowrap", "w", false, "whether to auto wrap the text output")
 	listCmd.Flags().BoolVarP(&raw, "raw", "r", false, "Whether to show the raw text (e.g. don't parse the newline character as a literal newline)")
+	listCmd.Flags().BoolVar(&titleOnly, "title-only", false, "Whether to only show the title")
 
 	return listCmd
 }

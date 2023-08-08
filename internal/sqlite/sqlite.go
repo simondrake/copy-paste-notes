@@ -83,8 +83,53 @@ func (c *Client) InsertNote(n notes.Note) (int, error) {
 	return int(id), nil
 }
 
-func (c *Client) UpdateNote(string, notes.Note) (*notes.Note, error) {
-	return nil, errors.New("not implemented")
+func (c *Client) UpdateNote(id int, note notes.Note) (int64, error) {
+	var res sql.Result
+
+	switch {
+	case note.Title != "" && note.Description != "":
+		stmt, err := c.db.Prepare("UPDATE notes SET title = ?, description = ? WHERE id = ?")
+		if err != nil {
+			return 0, err
+		}
+		defer stmt.Close()
+
+		res, err = stmt.Exec(note.Title, note.Description, id)
+		if err != nil {
+			return 0, err
+		}
+	case note.Title != "":
+		stmt, err := c.db.Prepare("UPDATE notes SET title = ? WHERE id = ?")
+		if err != nil {
+			return 0, err
+		}
+		defer stmt.Close()
+
+		res, err = stmt.Exec(note.Title, id)
+		if err != nil {
+			return 0, err
+		}
+	case note.Description != "":
+		stmt, err := c.db.Prepare("UPDATE notes description = ? WHERE id = ?")
+		if err != nil {
+			return 0, err
+		}
+		defer stmt.Close()
+
+		res, err = stmt.Exec(note.Description, id)
+		if err != nil {
+			return 0, err
+		}
+	default:
+		return 0, errors.New("either title or description must be defined")
+	}
+
+	affected, err := res.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+
+	return affected, nil
 }
 
 func (c *Client) DeleteNote(id int) error {
