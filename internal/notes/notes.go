@@ -20,7 +20,7 @@ type NoteReader interface {
 
 type NoteWriter interface {
 	InsertNote(Note) (int, error)
-	UpdateNote(string, Note) (*Note, error)
+	UpdateNote(int, Note) (int64, error)
 	DeleteNote(int) error
 }
 
@@ -50,6 +50,10 @@ func (c *Client) List() ([]Note, error) {
 
 func (c *Client) Create(n Note) (int, error) {
 	return c.nw.InsertNote(n)
+}
+
+func (c *Client) Update(id int, n Note) (int64, error) {
+	return c.nw.UpdateNote(id, n)
 }
 
 func (c *Client) Delete(id int) error {
