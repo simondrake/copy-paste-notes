@@ -102,12 +102,14 @@ func setupCommands() error {
 	}
 
 	addCmd := newAddCommand(client)
+	getCmd := newGetCommand(client)
 	listCmd := newListCommand(client)
 	copyCmd := newCopyCommand(client)
 	updateCmd := newUpdateCommand(client)
 	deleteCmd := newDeleteCommand(client)
 
 	rootCmd.AddCommand(addCmd)
+	rootCmd.AddCommand(getCmd)
 	rootCmd.AddCommand(listCmd)
 	rootCmd.AddCommand(copyCmd)
 	rootCmd.AddCommand(updateCmd)
