@@ -6,10 +6,10 @@ type Client struct {
 }
 
 type Note struct {
-	ID              int
-	Title           string
-	Description     string
-	CreateTimestamp string
+	ID              int    `json:"id,omitempty"`
+	Title           string `json:"title,omitempty"`
+	Description     string `json:"description,omitempty"`
+	CreateTimestamp string `json:"createTimestamp,omitempty"`
 }
 
 type NoteReader interface {
