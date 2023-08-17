@@ -110,7 +110,7 @@ func (c *Client) UpdateNote(id int, note notes.Note) (int64, error) {
 			return 0, err
 		}
 	case note.Description != "":
-		stmt, err := c.db.Prepare("UPDATE notes description = ? WHERE id = ?")
+		stmt, err := c.db.Prepare("UPDATE notes SET description = ? WHERE id = ?")
 		if err != nil {
 			return 0, err
 		}
