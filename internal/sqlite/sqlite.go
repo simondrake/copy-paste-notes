@@ -29,6 +29,10 @@ func New(file string) (*Client, error) {
 	}, nil
 }
 
+func (c *Client) Ping() error {
+	return c.db.Ping()
+}
+
 func (c *Client) ListNotes() ([]notes.Note, error) {
 	rows, err := c.db.Query("SELECT id, create_timestamp, title, description FROM notes")
 	if err != nil {
@@ -54,9 +58,11 @@ func (c *Client) GetNoteByID(id int) (*notes.Note, error) {
 
 	n := &notes.Note{}
 
-	err := row.Scan(&n.ID, &n.CreateTimestamp, &n.Title, &n.Description)
+	if err := row.Scan(&n.ID, &n.CreateTimestamp, &n.Title, &n.Description); err != nil {
+		return nil, err
+	}
 
-	return n, err
+	return n, nil
 }
 
 func (c *Client) GetNoteByTitle(title string) (*notes.Note, error) {
@@ -64,9 +70,11 @@ func (c *Client) GetNoteByTitle(title string) (*notes.Note, error) {
 
 	n := &notes.Note{}
 
-	err := row.Scan(&n.ID, &n.CreateTimestamp, &n.Title, &n.Description)
+	if err := row.Scan(&n.ID, &n.CreateTimestamp, &n.Title, &n.Description); err != nil {
+		return nil, err
+	}
 
-	return n, err
+	return n, nil
 }
 
 func (c *Client) InsertNote(n notes.Note) (int, error) {

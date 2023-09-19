@@ -5,12 +5,14 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 
 	"golang.design/x/clipboard"
 
+	"github.com/spf13/cobra"
+
 	"github.com/simondrake/copy-paste-notes/internal/notes"
 	"github.com/simondrake/copy-paste-notes/internal/sqlite"
-	"github.com/spf13/cobra"
 )
 
 func newCopyCommand(client *sqlite.Client) *cobra.Command {
@@ -68,6 +70,8 @@ func newCopyCommand(client *sqlite.Client) *cobra.Command {
 			}
 
 			clipboard.Write(clipboard.FmtText, []byte(note.Description))
+			// TODO - for some reason this is needed on linux. Find a way to avoid this cruft.
+			time.Sleep(500 * time.Millisecond)
 		},
 	}
 
