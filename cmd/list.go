@@ -7,9 +7,10 @@ import (
 	"strings"
 
 	"github.com/olekukonko/tablewriter"
+	"github.com/spf13/cobra"
+
 	"github.com/simondrake/copy-paste-notes/internal/notes"
 	"github.com/simondrake/copy-paste-notes/internal/sqlite"
-	"github.com/spf13/cobra"
 )
 
 func newListCommand(client *sqlite.Client) *cobra.Command {
@@ -49,7 +50,7 @@ func newListCommand(client *sqlite.Client) *cobra.Command {
 
 	listCmd.Flags().BoolVarP(&autoWrapText, "autowrap", "w", false, "whether to auto wrap the text output")
 	listCmd.Flags().BoolVarP(&raw, "raw", "r", false, "Whether to show the raw text (e.g. don't parse the newline character as a literal newline)")
-	listCmd.Flags().BoolVar(&titleOnly, "title-only", false, "Whether to only show the title")
+	listCmd.Flags().BoolVar(&titleOnly, "title-only", true, "Whether to only show the title")
 	listCmd.Flags().StringVarP(&format, "format", "f", "table", "output format to use [table, json]")
 
 	return listCmd

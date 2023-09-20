@@ -3,8 +3,10 @@ package sqlite
 import (
 	"database/sql"
 	"errors"
+	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
+
 	"github.com/simondrake/copy-paste-notes/internal/notes"
 )
 
@@ -91,45 +93,47 @@ func (c *Client) InsertNote(n notes.Note) (int, error) {
 	return int(id), nil
 }
 
+func appendStatement(stmt string, field string) string {
+	if strings.HasSuffix(strings.TrimSpace(stmt), "?") {
+		return stmt + ", " + field + " = ?"
+	}
+
+	return stmt + " " + field + " = ?"
+}
+
 func (c *Client) UpdateNote(id int, note notes.Note) (int64, error) {
-	var res sql.Result
+	if note.Title == "" && note.Description == "" {
+		return 0, errors.New("at least one field to update must be provided")
+	}
 
-	switch {
-	case note.Title != "" && note.Description != "":
-		stmt, err := c.db.Prepare("UPDATE notes SET title = ?, description = ? WHERE id = ?")
-		if err != nil {
-			return 0, err
-		}
-		defer stmt.Close()
+	stmtStr := "UPDATE notes SET"
 
-		res, err = stmt.Exec(note.Title, note.Description, id)
-		if err != nil {
-			return 0, err
-		}
-	case note.Title != "":
-		stmt, err := c.db.Prepare("UPDATE notes SET title = ? WHERE id = ?")
-		if err != nil {
-			return 0, err
-		}
-		defer stmt.Close()
+	args := make([]interface{}, 0)
 
-		res, err = stmt.Exec(note.Title, id)
-		if err != nil {
-			return 0, err
-		}
-	case note.Description != "":
-		stmt, err := c.db.Prepare("UPDATE notes SET description = ? WHERE id = ?")
-		if err != nil {
-			return 0, err
-		}
-		defer stmt.Close()
+	if note.Title != "" {
+		stmtStr = appendStatement(stmtStr, "title")
+		args = append(args, note.Title)
+	}
 
-		res, err = stmt.Exec(note.Description, id)
-		if err != nil {
-			return 0, err
-		}
-	default:
-		return 0, errors.New("either title or description must be defined")
+	if note.Description != "" {
+		stmtStr = appendStatement(stmtStr, "description")
+		args = append(args, note.Description)
+	}
+
+	stmtStr = stmtStr + " WHERE id = ?"
+
+	stmt, err := c.db.Prepare(stmtStr)
+	if err != nil {
+		return 0, err
+	}
+
+	defer stmt.Close()
+
+	args = append(args, id)
+
+	res, err := stmt.Exec(args...)
+	if err != nil {
+		return 0, err
 	}
 
 	affected, err := res.RowsAffected()
