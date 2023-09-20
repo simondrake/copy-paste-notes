@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/spf13/cobra"
+
 	"github.com/simondrake/copy-paste-notes/internal/notes"
 	"github.com/simondrake/copy-paste-notes/internal/sqlite"
-	"github.com/spf13/cobra"
 )
 
 func newUpdateCommand(client *sqlite.Client) *cobra.Command {

@@ -13,9 +13,10 @@ import (
 
 	"github.com/ory/dockertest"
 	"github.com/ory/dockertest/docker"
-	"github.com/simondrake/copy-paste-notes/internal/notes"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/simondrake/copy-paste-notes/internal/notes"
 )
 
 var client *Client
@@ -326,4 +327,17 @@ func TestDeleteNote(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Zero(t, len(ns))
 	})
+}
+
+func TestAppendStatement(t *testing.T) {
+	stmt := "UPDATE notes SET"
+
+	stmt = appendStatement(stmt, "title")
+	assert.Equal(t, "UPDATE notes SET title = ?", stmt)
+
+	stmt = appendStatement(stmt, "description")
+	assert.Equal(t, "UPDATE notes SET title = ?, description = ?", stmt)
+
+	stmt = appendStatement(stmt, "some_random_field")
+	assert.Equal(t, "UPDATE notes SET title = ?, description = ?, some_random_field = ?", stmt)
 }

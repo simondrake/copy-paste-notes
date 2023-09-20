@@ -5,9 +5,10 @@ import (
 	"os"
 	"path"
 
-	"github.com/simondrake/copy-paste-notes/internal/sqlite"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/simondrake/copy-paste-notes/internal/sqlite"
 )
 
 var cfgFile string
@@ -107,6 +108,7 @@ func setupCommands() error {
 	copyCmd := newCopyCommand(client)
 	updateCmd := newUpdateCommand(client)
 	deleteCmd := newDeleteCommand(client)
+	migrateCmd := newMigrateCommand(viper.GetString("db.file"))
 
 	rootCmd.AddCommand(addCmd)
 	rootCmd.AddCommand(getCmd)
@@ -114,6 +116,7 @@ func setupCommands() error {
 	rootCmd.AddCommand(copyCmd)
 	rootCmd.AddCommand(updateCmd)
 	rootCmd.AddCommand(deleteCmd)
+	rootCmd.AddCommand(migrateCmd)
 
 	return nil
 }
